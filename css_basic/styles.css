@@ -1,0 +1,30 @@
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	display: flex;
+	flex-direction: row;
+	flex: auto;
+}
+
+article {
+	flex: 2;
+	overflow-y: auto;
+}
+
+article {
+	flex: 1;
+	overflow-y: auto;
+}
+
+h1 {
+	color: blue;
+}
+
+#series {
+	background-color: brown;
+	margin: 20px;
+	padding: 80px;
+}
