@@ -1,14 +1,14 @@
 #!/usr/bin/python3
-""" lru cache """
+"""This is an LRU cache """
 
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """ lru cache """
+    """ An LRU cache """
 
     def put(self, key, item):
-        """Add an item in the cache"""
+        """Adds an item in the cache"""
         if key is None or item is None:
             return
         if (key not in self.cache_data and
@@ -22,7 +22,7 @@ class LRUCache(BaseCaching):
         self.cache_data[key] = item
 
     def get(self, key):
-        """Get an item in the cache"""
+        """Gets an item in the cache"""
         if key is None or key not in self.cache_data:
             return None
         item = self.cache_data[key]
