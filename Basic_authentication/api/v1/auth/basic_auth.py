@@ -13,7 +13,10 @@ class BasicAuth(Auth):
     """ BasicAuth class
     """
 
-    def extract_base64_authorization_header(self, authorization_header: str) -> str:
+    def extract_base64_authorization_header(
+            self,
+            authorization_header: str
+    ) -> str:
         """extract base64 auth header"""
         if authorization_header is None:
             return None
@@ -23,18 +26,25 @@ class BasicAuth(Auth):
             return None
         return authorization_header[6:]
 
-    def decode_base64_authorization_header(self, base64_authorization_header: str) -> str:
+    def decode_base64_authorization_header(
+            self,
+            base64_authorization_header: str
+    ) -> str:
         """decode base64 auth header"""
         if base64_authorization_header is None:
             return None
         if type(base64_authorization_header) is not str:
             return None
         try:
-            return base64.b64decode(base64_authorization_header).decode('utf-8')
+            return base64.b64decode(
+                base64_authorization_header).decode('utf-8')
         except Exception:
             return None
 
-    def extract_user_credentials(self, decoded_base64_authorization_header: str) -> (str, str):
+    def extract_user_credentials(
+            self,
+            decoded_base64_authorization_header: str
+    ) -> (str, str):
         """extract user credentials"""
         if decoded_base64_authorization_header is None:
             return None, None
@@ -44,31 +54,26 @@ class BasicAuth(Auth):
             return None, None
         return tuple(decoded_base64_authorization_header.split(':', 1))
 
-    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str
+    ) -> TypeVar('User'):
         """user object from credentials"""
         if user_email is None or type(user_email) is not str:
             return None
         if user_pwd is None or type(user_pwd) is not str:
             return None
 
-        # Debugging: Print user email to ensure it is passed correctly
-        print(f"Searching for user with email: {user_email}")
-        
         users = User.search({'email': user_email})
 
         if not users:
-            # Debugging: No users found
-            print(f"No users found with email: {user_email}")
             return None
-        
+        if users is None or len(users) == 0:
+            return None
         for user in users:
             if user.is_valid_password(user_pwd):
-                # Debugging: Valid user found
-                print(f"Valid user found: {user_email}")
                 return user
-        
-        # Debugging: No valid user found with the provided password
-        print(f"No valid user found with email: {user_email} and provided password")
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
@@ -79,10 +84,12 @@ class BasicAuth(Auth):
         b64 = self.extract_base64_authorization_header(header)
         if b64 is None:
             return None
-        decoded = self.decode_base64_authorization_header(b64)
+        decoded = self.decode_base64_authorization_header(
+            b64)
         if decoded is None:
             return None
-        user_info = self.extract_user_credentials(decoded)
+        user_info = self.extract_user_credentials(
+            decoded)
         if user_info is None:
             return None
         email, pwd = user_info
